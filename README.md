@@ -1,291 +1,897 @@
-# ジェットエンジンとは？
+Markdown: Syntax
+================
+
+<ul id="ProjectSubmenu">
+    <li><a href="/projects/markdown/" title="Markdown Project Page">Main</a></li>
+    <li><a href="/projects/markdown/basics" title="Markdown Basics">Basics</a></li>
+    <li><a class="selected" title="Markdown Syntax Documentation">Syntax</a></li>
+    <li><a href="/projects/markdown/license" title="Pricing and License Information">License</a></li>
+    <li><a href="/projects/markdown/dingus" title="Online Markdown Web Form">Dingus</a></li>
+</ul>
+
+
+*   [Overview](#overview)
+    *   [Philosophy](#philosophy)
+    *   [Inline HTML](#html)
+    *   [Automatic Escaping for Special Characters](#autoescape)
+*   [Block Elements](#block)
+    *   [Paragraphs and Line Breaks](#p)
+    *   [Headers](#header)
+    *   [Blockquotes](#blockquote)
+    *   [Lists](#list)
+    *   [Code Blocks](#precode)
+    *   [Horizontal Rules](#hr)
+*   [Span Elements](#span)
+    *   [Links](#link)
+    *   [Emphasis](#em)
+    *   [Code](#code)
+    *   [Images](#img)
+*   [Miscellaneous](#misc)
+    *   [Backslash Escapes](#backslash)
+    *   [Automatic Links](#autolink)
+
+
+**Note:** This document is itself written using Markdown; you
+can [see the source for it by adding '.text' to the URL][src].
+
+  [src]: /projects/markdown/syntax.text
+
+* * *
 
-## 説明①出典：[Wikipedia][1]
+<h2 id="overview">Overview</h2>
+
+<h3 id="philosophy">Philosophy</h3>
 
->ジェットエンジン （英語:jet engine）とは、外部から取り込んだ空気を利用すること、および噴流（ジェット）を直接的生成することをともに満たし、ジェットに起因する反作用を推進に直接利用する熱機関をいう。
+Markdown is intended to be as easy-to-read and easy-to-write as is feasible.
+
+Readability, however, is emphasized above all else. A Markdown-formatted
+document should be publishable as-is, as plain text, without looking
+like it's been marked up with tags or formatting instructions. While
+Markdown's syntax has been influenced by several existing text-to-HTML
+filters -- including [Setext] [1], [atx] [2], [Textile] [3], [reStructuredText] [4],
+[Grutatext] [5], and [EtText] [6] -- the single biggest source of
+inspiration for Markdown's syntax is the format of plain text email.
 
->ジェットの生成エネルギーには、取り込んだ空気に含まれる酸素と燃料との化学反応（燃焼）の熱エネルギーが利用される。狭義には、空気吸い込み型の噴流エンジンだけを指す。
+  [1]: http://docutils.sourceforge.net/mirror/setext.html
+  [2]: http://www.aaronsw.com/2002/atx/
+  [3]: http://textism.com/tools/textile/
+  [4]: http://docutils.sourceforge.net/rst.html
+  [5]: http://www.triptico.com/software/grutatxt.html
+  [6]: http://ettext.taint.org/doc/
 
->また、主に航空機（固定翼機、回転翼機）やミサイルの推進機関または動力源として使用されるものを指す。
+To this end, Markdown's syntax is comprised entirely of punctuation
+characters, which punctuation characters have been carefully chosen so
+as to look like what they mean. E.g., asterisks around a word actually
+look like \*emphasis\*. Markdown lists look like, well, lists. Even
+blockquotes look like quoted passages of text, assuming you've ever
+used email.
 
-## 説明②出典：[IHIイズム][2]
 
->ジェットエンジンとは飛行機に搭載されている原動機（エンジン）のことで、飛行機を前進させるために使われます。
 
->ジェットを発生させるエンジンなので「ジェットエンジン」と呼びます。
+<h3 id="html">Inline HTML</h3>
 
->また、プロペラエンジンが、入り口の空気をそのまま押し出すのに対して、ジェットエンジンは内部で燃焼して膨張したガスを噴出するので、より高速に進むことができます。
+Markdown's syntax is intended for one purpose: to be used as a
+format for *writing* for the web.
 
->その推力は、飛行機を音の速さの約3倍、時速3,600kmのスピードで飛行させることも可能です。
+Markdown is not a replacement for HTML, or even close to it. Its
+syntax is very small, corresponding only to a very small subset of
+HTML tags. The idea is *not* to create a syntax that makes it easier
+to insert HTML tags. In my opinion, HTML tags are already easy to
+insert. The idea for Markdown is to make it easy to read, write, and
+edit prose. HTML is a *publishing* format; Markdown is a *writing*
+format. Thus, Markdown's formatting syntax only addresses issues that
+can be conveyed in plain text.
 
->ジェットエンジンは、前方から空気を吸い込んで、空気を圧縮、そこに燃料を吹き込んで燃焼ガスを作り、それを勢い良く後方に噴射して、その反作用の力で飛行機を前進させています。
+For any markup that is not covered by Markdown's syntax, you simply
+use HTML itself. There's no need to preface it or delimit it to
+indicate that you're switching from Markdown to HTML; you just use
+the tags.
 
->ジェットエンジンの力で飛行機が速いスピードで前進すると、翼には空気によって浮かび上がる力（揚力）が発生します。
+The only restrictions are that block-level HTML elements -- e.g. `<div>`,
+`<table>`, `<pre>`, `<p>`, etc. -- must be separated from surrounding
+content by blank lines, and the start and end tags of the block should
+not be indented with tabs or spaces. Markdown is smart enough not
+to add extra (unwanted) `<p>` tags around HTML block-level tags.
 
->この「揚力」と「反作用の力」で、飛行機は大空を飛び回ることができるのです。
+For example, to add an HTML table to a Markdown article:
 
-------------------------------------------------
+    This is a regular paragraph.
 
-#ターボジェットエンジンとは？
+    <table>
+        <tr>
+            <td>Foo</td>
+        </tr>
+    </table>
 
-## 説明①出典：[Wikipedia][3]
+    This is another regular paragraph.
 
->ターボジェットエンジン （Turbojet engine）はジェットエンジンの一種。ターボファンエンジンやターボプロップエンジンに対し、レトロニムとして ピュアジェットエンジン とも言われる。
+Note that Markdown formatting syntax is not processed within block-level
+HTML tags. E.g., you can't use Markdown-style `*emphasis*` inside an
+HTML block.
 
->吸入空気をコンプレッサーで圧縮し、燃焼室に導き燃料と混合して点火、その爆発によって生じた排気流をそのまま推進力として用い、その推進力の一部をコンプレッサーの駆動へと還元する。
+Span-level HTML tags -- e.g. `<span>`, `<cite>`, or `<del>` -- can be
+used anywhere in a Markdown paragraph, list item, or header. If you
+want, you can even use HTML tags instead of Markdown formatting; e.g. if
+you'd prefer to use HTML `<a>` or `<img>` tags instead of Markdown's
+link or image syntax, go right ahead.
 
->最も基本的なジェットエンジンの形式である。
+Unlike block-level HTML tags, Markdown syntax *is* processed within
+span-level tags.
 
->パルスジェットやモータージェットとともに、最初期に開発されたジェットエンジンのひとつである。
 
->パルスジェットはコンプレッサーを用いない自然圧縮のため出力が低く、モータージェットはコンプレッサーを外部動力で駆動するため効率が悪く、ターボジェットが最初期のジェットエンジンとしては最も能力に優れ、その後も発展していった。
+<h3 id="autoescape">Automatic Escaping for Special Characters</h3>
 
->しかしながらターボジェットには、排気流の速度が高過ぎるという欠点があった。
+In HTML, there are two characters that demand special treatment: `<`
+and `&`. Left angle brackets are used to start tags; ampersands are
+used to denote HTML entities. If you want to use them as literal
+characters, you must escape them as entities, e.g. `&lt;`, and
+`&amp;`.
 
->ジェットエンジンの排気流は、機体速度よりも若干速い程度においてもっとも効率が高いため、機体速度が音速以下ではターボジェットの効率は非常に悪くなる。
+Ampersands in particular are bedeviling for web writers. If you want to
+write about 'AT&T', you need to write '`AT&amp;T`'. You even need to
+escape ampersands within URLs. Thus, if you want to link to:
 
->そのため亜音速機においてはターボファンエンジンやターボプロップエンジンが主流となった。
+    http://images.google.com/images?num=30&q=larry+bird
 
-## 説明②出典：[IHIイズム][2]
+you need to encode the URL as:
 
->自力で吸い込んだ空気をすべて圧縮して燃焼させ、排気口から勢いよく噴射させることで高い推力を発生させています。
+    http://images.google.com/images?num=30&amp;q=larry+bird
 
->主に戦闘機などの、高速スピードを優先する航空機に使われています。
+in your anchor tag `href` attribute. Needless to say, this is easy to
+forget, and is probably the single most common source of HTML validation
+errors in otherwise well-marked-up web sites.
 
-## 説明③出典：[航空実用事典][4]
+Markdown allows you to use these characters naturally, taking care of
+all the necessary escaping for you. If you use an ampersand as part of
+an HTML entity, it remains unchanged; otherwise it will be translated
+into `&amp;`.
 
->タービンの軸出力をすべてコンプレッサーの駆動に消費し，エンジンの出す推力の100％を排気の持つ運動のエネルギーによっているもので（図1-6-4.A），初期のタービン・エンジンはほとんどがこのターボジェットで占められていた。
+So, if you want to include a copyright symbol in your article, you can write:
 
->しかし飛行速度に比べて，きわめて高速の排気ガスを噴出させて推力を得るため，音速以上の飛行では優れた性能を示すものの，亜音速飛行では燃料消費率や推進効率で他に劣ることと，排気騒音が大きいなどの欠点から，現在，使途は主として軍用機に限られている。
+    &copy;
 
-## 説明④出典：[コトバンク][5]
+and Markdown will leave it alone. But if you write:
 
->ジェットエンジンの一。ガスタービンの排気ガスを利用し、燃焼ガスをジェットノズルから噴出させて、その反動で推進力を得る。噴流速度が大きく、高音速から超音速の航空機に適する。
+    AT&T
 
-------------------------------------------------
+Markdown will translate it to:
 
-# ターボファンエンジンとは？
+    AT&amp;T
 
-## 説明①出典：[Wikipedia][6]
+Similarly, because Markdown supports [inline HTML](#html), if you use
+angle brackets as delimiters for HTML tags, Markdown will treat them as
+such. But if you write:
 
->ターボファンエンジン （Turbofan engine）は、ジェットエンジンの一種。コアとなるターボジェットエンジンにファンを追加したものである。
+    4 < 5
 
->ファンを用いることにより、ターボジェットと異なり、コアエンジン部を迂回したエアフローが設定されている。
+Markdown will translate it to:
 
->このエアフローにより、ジェットエンジン推力の増大および効率化が行われる。
+    4 &lt; 5
 
->1960年代より実用化が行われ、現代のジェットエンジンの主流となっているものである。
+However, inside Markdown code spans and blocks, angle brackets and
+ampersands are *always* encoded automatically. This makes it easy to use
+Markdown to write about HTML code. (As opposed to raw HTML, which is a
+terrible format for writing about HTML syntax, because every single `<`
+and `&` in your example code needs to be escaped.)
 
->ターボジェットエンジンは、燃焼室で燃焼した高熱排気をノズルより噴出させている。
 
->この高熱排気の噴流が、エンジンの推進力となる。
+* * *
 
->しかしジェットエンジンにおける推進効率は、空気抵抗との関係により、排気の速度が飛行速度より若干速い程度の速度である場合に最も良いものとなる。
 
->このため、亜音速で飛行するジェット機の場合は、機体速度よりもジェット噴流がかなり高速になり、推進効率が悪くなる。
+<h2 id="block">Block Elements</h2>
 
->この問題を解決するために考えられたのが、タービンから得られる軸出力をコンプレッサーの駆動に用いるのみならず、プロペラの駆動にも用いるターボプロップエンジンである。
 
-## 説明②出典：[コトバンク][7]
+<h3 id="p">Paragraphs and Line Breaks</h3>
 
->ガスタービン・エンジンの一種。
+A paragraph is simply one or more consecutive lines of text, separated
+by one or more blank lines. (A blank line is any line that looks like a
+blank line -- a line containing nothing but spaces or tabs is considered
+blank.) Normal paragraphs should not be indented with spaces or tabs.
 
->ターボジェット・エンジンの前部に大きなファンを増設し，最後部に追加したタービンで駆動する。
+The implication of the "one or more consecutive lines of text" rule is
+that Markdown supports "hard-wrapped" text paragraphs. This differs
+significantly from most other text-to-HTML formatters (including Movable
+Type's "Convert Line Breaks" option) which translate every line break
+character in a paragraph into a `<br />` tag.
 
->これによって大量の空気を圧縮するが，その大半は燃焼室を通らず，側路を通るバイパス流となって後方へ噴射され，燃焼ガスと相まってエンジン推力を高める。
+When you *do* want to insert a `<br />` break tag using Markdown, you
+end a line with two or more spaces, then type return.
 
-------------------------------------------------
+Yes, this takes a tad more effort to create a `<br />`, but a simplistic
+"every line break is a `<br />`" rule wouldn't work for Markdown.
+Markdown's email-style [blockquoting][bq] and multi-paragraph [list items][l]
+work best -- and look better -- when you format them with hard breaks.
 
-# ガスタービンエンジンとジェットエンジンの違い
+  [bq]: #blockquote
+  [l]:  #list
 
-## 説明①出典：[Wikipedia][15]
 
->ガスタービンは遠心式又は軸流式の回転式圧縮機で燃焼用空気を圧縮して燃焼器に送り込み、燃料を燃焼器に吹き込んで燃焼させる。
 
->その際に発生した高温高圧の燃焼ガスが遠心式もしくは軸流式タービンを回転させる。
+<h3 id="header">Headers</h3>
 
->タービン軸は通常、圧縮機と直結しており、圧縮機に圧縮動力を伝え、持続運転する。
+Markdown supports two styles of headers, [Setext] [1] and [atx] [2].
 
->燃焼ガスの熱エネルギーを全てタービンで回収して軸出力を取り出す場合と、軸出力は圧縮機の動力としてのみ用いて燃焼ガスの後方噴出により推力を得るジェットエンジンがある。
+Setext-style headers are "underlined" using equal signs (for first-level
+headers) and dashes (for second-level headers). For example:
 
->自動車、レシプロ機関を持つ航空機等に用いられるターボチャージャーも、エンジンを燃焼器とし出力軸を持たない一種のガスタービンに分類できる。
+    This is an H1
+    =============
 
-## 説明②出典：[IHIイズム][2]
+    This is an H2
+    -------------
 
->エンジンにはピストンを使うピストン・エンジンと、回転機械を使うタービン・エンジンがあります。
+Any number of underlining `=`'s or `-`'s will work.
 
->タービン・エンジンを航空機に搭載するとジェットエンジンと呼び、陸上や船舶に使う場合、ガスタービンと呼んでいます。
+Atx-style headers use 1-6 hash characters at the start of the line,
+corresponding to header levels 1-6. For example:
 
-## 説明③出典：[ターボ機械協会][10]
+    # This is an H1
 
->産業用ガスタービンとジェットエンジンは、その主要な部分である図２のロータＡが同じであるため、 ジェットエンジンは産業用にも転用出来て、航空転用形ガスタービンと呼ばれ、軽量であるなどの特徴を持っています。
+    ## This is an H2
 
->一方、最初から産業用として開発されてきたものは重構造形ガスタービンと呼ばれて発電容量が大きいなどの特徴を持っています。
+    ###### This is an H6
 
->このように、ジェットエンジンと産業用ガスタービンは双子と考えてもよいかもしれません。
+Optionally, you may "close" atx-style headers. This is purely
+cosmetic -- you can use this if you think it looks better. The
+closing hashes don't even need to match the number of hashes
+used to open the header. (The number of opening hashes
+determines the header level.) :
 
->一人は息を使って風船を膨らませてその圧力で風船を飛ばして遊ぶ子供、もう一人は息で"かざぐるま"を回して 遊ぶ子供を想像すれば理解しやすいでしょう。
+    # This is an H1 #
 
-## 説明④出典：[りっか！(個人ブログ)][11]
+    ## This is an H2 ##
 
->はっきり言いますとこの二つには大した差がありません。というより広義では同じものです。
+    ### This is an H3 ######
 
->ただし”JET”の元々の意味は”噴射”ですから桜上水は”ガスタービンエンジンのうち、その排気の推進力を動力源として利用するエンジン”をジェットエンジンだと見ています。
 
->ガスタービンエンジンとジェットエンジンをヒト目で見分ける方法は”排気口が絞り込まれているかいないか”です。
+<h3 id="blockquote">Blockquotes</h3>
 
->一例を挙げると、現在の殆どのガスタービンを用いるヘリコプター（これが一部では”ジェットヘリ”と言われているのでややこしい）はガスタービンエンジンの排圧を推進力に利用していません。
+Markdown uses email-style `>` characters for blockquoting. If you're
+familiar with quoting passages of text in an email message, then you
+know how to create a blockquote in Markdown. It looks best if you hard
+wrap the text and put a `>` before every line:
 
->もし仮にこれを推進力に利用したとしたらそれはオートジャイロになりますし、加速にブレードが耐えられず空中分解起こします。あくまで”効率のいいエンジン”としてガスタービンエンジンは利用されています
+    > This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+    > consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+    > Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
+    > 
+    > Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+    > id sem consectetuer libero luctus adipiscing.
 
-------------------------------------------------
+Markdown allows you to be lazy and only put the `>` before the first
+line of a hard-wrapped paragraph:
 
-# ギヤードターボファンエンジンとは？
+    > This is a blockquote with two paragraphs. Lorem ipsum dolor sit amet,
+    consectetuer adipiscing elit. Aliquam hendrerit mi posuere lectus.
+    Vestibulum enim wisi, viverra nec, fringilla in, laoreet vitae, risus.
 
-## 説明①出典：[wikipedia][12]
+    > Donec sit amet nisl. Aliquam semper ipsum sit amet velit. Suspendisse
+    id sem consectetuer libero luctus adipiscing.
 
->ギヤードターボファンエンジン （Geared Turbo Fan Engine、 GTF ）とは、ジェットエンジンの一種。
+Blockquotes can be nested (i.e. a blockquote-in-a-blockquote) by
+adding additional levels of `>`:
 
->従来のターボファンエンジンの発展形であり、従来と異なるのは、ファンを減速して駆動するために遊星歯車機構を採用する点である。
+    > This is the first level of quoting.
+    >
+    > > This is nested blockquote.
+    >
+    > Back to the first level.
 
->ファンとコンプレッサの間に減速ギアボックスを挿入したスタイルを持つGTFの構造は、本質的にターボプロップエンジンのプロペラをタービンと同軸のダクテッドファンとしたものといえる。
+Blockquotes can contain other Markdown elements, including headers, lists,
+and code blocks:
 
->ギヤード・ターボファンでは、一般的なハイバイパス比ターボファンエンジンと同様、減速ギアボックスを通じて駆動されるファンが大半の推力を生み出し、その他の推力はエンジン排気から直接生み出される。
+	> ## This is a header.
+	> 
+	> 1.   This is the first list item.
+	> 2.   This is the second list item.
+	> 
+	> Here's some example code:
+	> 
+	>     return shell_exec("echo $input | $markdown_script");
 
-------------------------------------------------
+Any decent text editor should make email-style quoting easy. For
+example, with BBEdit, you can make a selection and choose Increase
+Quote Level from the Text menu.
 
-# ターボプロップエンジンとは？
 
-## 説明①出典：[wikipedia][13]
+<h3 id="list">Lists</h3>
 
->ターボプロップエンジンはガスタービンエンジンの1形態で、そのエネルギーの大部分をプロペラを回転させる力として取り出すものである。
+Markdown supports ordered (numbered) and unordered (bulleted) lists.
 
->ターボプロップエンジンは主に小型、あるいは低亜音速の航空機用動力として利用されるが、中には最大速度が500ノット (925 km/h) に達するような高速機においても適用例がある。
+Unordered lists use asterisks, pluses, and hyphens -- interchangably
+-- as list markers:
 
->ターボプロップエンジンは、ターボファンエンジンやギヤードターボファンエンジンと類似した機構を持っている。
+    *   Red
+    *   Green
+    *   Blue
 
->一方、ターボプロップエンジンは一般的なターボファンエンジンとは異なり、プロペラシャフトと出力タービンの間に減速機が挿入されている。
+is equivalent to:
 
->減速機が間にあることにより、効率を維持するために高回転を必要とする出力タービン軸と、ブレード先端速度が音速を超えないよう回転数に制限があるプロペラシャフトのどちらもが良好な効率を保つことができる。
+    +   Red
+    +   Green
+    +   Blue
 
-## 説明②出典：[IHIイズム][2]
+and:
 
->ターボジェット・エンジンの回転軸をさらに前方に伸ばし、回転軸に減速装置を取り付け、プロペラを回転しているのがターボプロップ・エンジンです。
+    -   Red
+    -   Green
+    -   Blue
 
->燃費に優れ、長時間飛行できる特性を持っています。中小型旅客機に用いられます。
+Ordered lists use numbers followed by periods:
 
-## 説明③出典：[コトバンク][14]
+    1.  Bird
+    2.  McHale
+    3.  Parish
 
->ジェットエンジンの一種。吸入した大気の圧縮用の圧縮機とその駆動用タービンをもつことはターボジェットエンジンと同じだが、さらにプロペラ駆動用のタービンをもち、燃焼ガスのエネルギーの大部分をタービンが吸収してプロペラ（一部は圧縮機）を回転させるほか、噴出ガスにより補助的な推力を得る。
+It's important to note that the actual numbers you use to mark the
+list have no effect on the HTML output Markdown produces. The HTML
+Markdown produces from the above list is:
 
-------------------------------------------------
+    <ol>
+    <li>Bird</li>
+    <li>McHale</li>
+    <li>Parish</li>
+    </ol>
 
-# ターボシャフトエンジンとは？
+If you instead wrote the list in Markdown like this:
 
-## 説明①出典：[Wikipedia][16]
+    1.  Bird
+    1.  McHale
+    1.  Parish
 
->ターボシャフトエンジン (Turboshaft engine)はジェットエンジン/ガスタービンエンジンの一種。
+or even:
 
->ジェットエンジンが排気の噴出力を推進力として利用するのに対し、タービン排気より軸出力を取り出し、それを用いる方式である。
+    3. Bird
+    1. McHale
+    8. Parish
 
->戦車や船舶用ガスタービンなども軸出力を用いている点では同等であるが、航空機用エンジンとして用いられている場合、 ターボシャフトエンジン と呼ばれる。
+you'd get the exact same HTML output. The point is, if you want to,
+you can use ordinal numbers in your ordered Markdown lists, so that
+the numbers in your source match the numbers in your published HTML.
+But if you want to be lazy, you don't have to.
 
->ターボプロップエンジンでは、軸出力のほか、排気を一部推進力に利用しているが、ターボシャフトエンジンでは排気を推進力としては用いない点が異なる。
+If you do use lazy list numbering, however, you should still start the
+list with the number 1. At some point in the future, Markdown may support
+starting ordered lists at an arbitrary number.
 
->ターボシャフトエンジンは、特にヘリコプター向けとして用いられている。
+List markers typically start at the left margin, but may be indented by
+up to three spaces. List markers must be followed by one or more spaces
+or a tab.
 
-## 説明②出典：[航空実用事典][17]
+To make lists look nice, you can wrap items with hanging indents:
 
->ターボプロップ・エンジンを一歩進め、エンジン出力を100％軸出力として取り出すように設計されたもので、主としてヘリコプターの動力に用いられる。
+    *   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+        Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+        viverra nec, fringilla in, laoreet vitae, risus.
+    *   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+        Suspendisse id sem consectetuer libero luctus adipiscing.
 
->多くの場合，コンプレッサー駆動タービンの後方に，機械的に独立したフリー・タービン（free turbine，パワー・タービンともいう）を有し，このタービンの軸出力を減速してヘリコプターローターを回す。
+But if you want to be lazy, you don't have to:
 
->出力は400～11,000SHPでピストン・エンジンに代わってヘリコプター用エンジンの主流となっている。
+    *   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+    Aliquam hendrerit mi posuere lectus. Vestibulum enim wisi,
+    viverra nec, fringilla in, laoreet vitae, risus.
+    *   Donec sit amet nisl. Aliquam semper ipsum sit amet velit.
+    Suspendisse id sem consectetuer libero luctus adipiscing.
 
-## 説明③出典：[IHIイズム][2]
+If list items are separated by blank lines, Markdown will wrap the
+items in `<p>` tags in the HTML output. For example, this input:
 
->ターボジェット・エンジンに独立したタービンを最後尾に追加して、その回転シャフトを後方に取り出しているのがターボシャフト・エンジンです。
+    *   Bird
+    *   Magic
 
->ヘリコプターに多く使われています。
+will turn into:
 
-## 説明④出典：[コトバンク][18]
+    <ul>
+    <li>Bird</li>
+    <li>Magic</li>
+    </ul>
 
->航空機用タービンエンジンの一種。ガスのエネルギーを100％軸の回転力として取り出すようにしたエンジン。
+But this:
 
->多くの場合、フリータービン形式（空気圧縮機を駆動するタービンとは別に、出力を軸に取り出すため独立した専用のタービンを備える形式）を採用し、減速装置を経て出力軸を駆動する。
+    *   Bird
 
->主としてヘリコプターの回転翼駆動用として開発され、現在ではヘリコプター用エンジンの主流となっている。
+    *   Magic
 
-------------------------------------------------
+will turn into:
 
-# パルスデトネーションエンジンとは？
+    <ul>
+    <li><p>Bird</p></li>
+    <li><p>Magic</p></li>
+    </ul>
 
-## 説明①出典：[広島大学・反応気体力学研究室][19]
+List items may consist of multiple paragraphs. Each subsequent
+paragraph in a list item must be indented by either 4 spaces
+or one tab:
 
->パルスデトネーションエンジン(Pulse Detonation Engine:PDE)は、燃焼をデトネーションで行う内燃機関です。
+    1.  This is a list item with two paragraphs. Lorem ipsum dolor
+        sit amet, consectetuer adipiscing elit. Aliquam hendrerit
+        mi posuere lectus.
 
->デトネーションを繰り返し発生させて高速ジェットを噴出させることで推進用エンジンとして作動します。
+        Vestibulum enim wisi, viverra nec, fringilla in, laoreet
+        vitae, risus. Donec sit amet nisl. Aliquam semper ipsum
+        sit amet velit.
 
->また、高速ジェットをタービンに噴きつけて駆動することで軸動力を取り出すこともできます（パルスデトネーションタービンエンジン）。
+    2.  Suspendisse id sem consectetuer libero luctus adipiscing.
 
->パルスデトネーションエンジンはデトネーションで燃焼が行われるため、デフラグレーションで燃焼を行う一般的な内燃機関よりも高い理論熱効率が得られます。
+It looks nice if you indent every line of the subsequent
+paragraphs, but here again, Markdown will allow you to be
+lazy:
 
-# バイパス比とは？
+    *   This is a list item with two paragraphs.
 
-## 説明①出典：[Wikipedia][6]
+        This is the second paragraph in the list item. You're
+    only required to indent the first line. Lorem ipsum dolor
+    sit amet, consectetuer adipiscing elit.
 
->フロントファンのターボファンエンジンで、コアエンジンに使用する空気流入量とファンのみを通過する空気流入量の比率は、バイパス比と呼ばれる。
+    *   Another item in the same list.
 
-## 説明②出典：[コトバンク][8]
+To put a blockquote within a list item, the blockquote's `>`
+delimiters need to be indented:
 
->航空機用ターボジェット・エンジンの一種であるターボファン・エンジンにおいて，ファンだけを流れ，主エンジン内を流れない空気 (バイパス空気) と，主エンジン内を流れる空気との流量比のこと。
+    *   A list item with a blockquote:
 
-## 説明③出典：[weblio][9]
+        > This is a blockquote
+        > inside a list item.
 
->ターボファンエンジンにおける、バイパス流と燃焼室に流れる空気の比。
+To put a code block within a list item, the code block needs
+to be indented *twice* -- 8 spaces or two tabs:
 
->この数値が高いほど、ターボファンとしての特徴が顕著になる。
+    *   A list item with a code block:
 
->バイパス比が高くなると、後方に噴出する空気の質量が大きくなり、同じ推力を発生する場合には、より低速で空気を噴出することになる。
+            <code goes here>
 
->その後方へ噴出する空気の運動エネルギーは速度の二乗に比例する為、噴出速度が速い場合に著しく燃費が悪くなる。
 
->逆に、噴出速度を遅くできる高バイパス比ターボファンは燃費が良くなる。
+It's worth noting that it's possible to trigger an ordered list by
+accident, by writing something like this:
 
-ジェットエンジン
-┣ターボジェットエンジン
-┣ターボファンエンジン
-┃┗ギヤードターボファンエンジン
-┣ターボプロップエンジン
-┣ターボシャフトエンジン
-┣パルスジェットエンジン
-┃┣バルブレスパルスジェットエンジン
-┃┗パルスデトネーションエンジン
-┣ラムジェットエンジン
-┣原子力ターボジェットエンジン
+    1986. What a great season.
 
-ブレードの形状
-素材⇒軽量化、耐久性
+In other words, a *number-period-space* sequence at the beginning of a
+line. To avoid this, you can backslash-escape the period:
 
-[//]: # (以下、参考リンク集)
+    1986\. What a great season.
 
-[1]: http://ja.wikipedia.org/wiki/%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[2]:https://www.ihi.co.jp/ihi-ism/techno/jetengine1.html
-[3]:http://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9C%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[4]:http://www.jal.com/ja/jiten/dict/p217.html#01-02-01
-[5]:https://kotobank.jp/word/%E3%82%BF%E3%83%BC%E3%83%9C%E3%82%B8%E3%82%A7%E3%83%83%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3-556161
-[6]:http://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9C%E3%83%95%E3%82%A1%E3%83%B3%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[7]:https://kotobank.jp/word/%E3%82%BF%E3%83%BC%E3%83%9C%E3%83%95%E3%82%A1%E3%83%B3%E3%83%BB%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3-94248
-[8]:https://kotobank.jp/word/%E3%83%90%E3%82%A4%E3%83%91%E3%82%B9%E6%AF%94-113051
-[9]:http://www.weblio.jp/content/%E3%83%90%E3%82%A4%E3%83%91%E3%82%B9%E6%AF%94
-[10]:http://www.turbo-so.jp/turbo_descript/turbo_for_kids08.htm
-[11]:http://plaza.rakuten.co.jp/sakurazyousui/diary/200904220000/
-[12]:http://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9C%E3%83%97%E3%83%AD%E3%83%83%E3%83%97%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[13]:http://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9C%E3%83%97%E3%83%AD%E3%83%83%E3%83%97%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[14]:https://kotobank.jp/word/%E3%82%BF%E3%83%BC%E3%83%9C%E3%83%97%E3%83%AD%E3%83%83%E3%83%97%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3-556165
-[15]:http://ja.wikipedia.org/wiki/%E3%82%AC%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%93%E3%83%B3%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[16]:http://ja.wikipedia.org/wiki/%E3%82%BF%E3%83%BC%E3%83%9C%E3%82%B7%E3%83%A3%E3%83%95%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3
-[17]:http://www.jal.com/ja/jiten/dict/p217.html#01-02-04
-[18]:https://kotobank.jp/word/%E3%82%BF%E3%83%BC%E3%83%9C%E3%82%B7%E3%83%A3%E3%83%95%E3%83%88%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3-1362782
-[19]:http://home.hiroshima-u.ac.jp/rgdlab/rgdl_html/research/terminology/pulse%20detonetion%20enjine/pulse%20detonetion%20enjine.html
-[20]:
+
+
+<h3 id="precode">Code Blocks</h3>
+
+Pre-formatted code blocks are used for writing about programming or
+markup source code. Rather than forming normal paragraphs, the lines
+of a code block are interpreted literally. Markdown wraps a code block
+in both `<pre>` and `<code>` tags.
+
+To produce a code block in Markdown, simply indent every line of the
+block by at least 4 spaces or 1 tab. For example, given this input:
+
+    This is a normal paragraph:
+
+        This is a code block.
+
+Markdown will generate:
+
+    <p>This is a normal paragraph:</p>
+
+    <pre><code>This is a code block.
+    </code></pre>
+
+One level of indentation -- 4 spaces or 1 tab -- is removed from each
+line of the code block. For example, this:
+
+    Here is an example of AppleScript:
+
+        tell application "Foo"
+            beep
+        end tell
+
+will turn into:
+
+    <p>Here is an example of AppleScript:</p>
+
+    <pre><code>tell application "Foo"
+        beep
+    end tell
+    </code></pre>
+
+A code block continues until it reaches a line that is not indented
+(or the end of the article).
+
+Within a code block, ampersands (`&`) and angle brackets (`<` and `>`)
+are automatically converted into HTML entities. This makes it very
+easy to include example HTML source code using Markdown -- just paste
+it and indent it, and Markdown will handle the hassle of encoding the
+ampersands and angle brackets. For example, this:
+
+        <div class="footer">
+            &copy; 2004 Foo Corporation
+        </div>
+
+will turn into:
+
+    <pre><code>&lt;div class="footer"&gt;
+        &amp;copy; 2004 Foo Corporation
+    &lt;/div&gt;
+    </code></pre>
+
+Regular Markdown syntax is not processed within code blocks. E.g.,
+asterisks are just literal asterisks within a code block. This means
+it's also easy to use Markdown to write about Markdown's own syntax.
+
+
+
+<h3 id="hr">Horizontal Rules</h3>
+
+You can produce a horizontal rule tag (`<hr />`) by placing three or
+more hyphens, asterisks, or underscores on a line by themselves. If you
+wish, you may use spaces between the hyphens or asterisks. Each of the
+following lines will produce a horizontal rule:
+
+    * * *
+
+    ***
+
+    *****
+
+    - - -
+
+    ---------------------------------------
+
+
+* * *
+
+<h2 id="span">Span Elements</h2>
+
+<h3 id="link">Links</h3>
+
+Markdown supports two style of links: *inline* and *reference*.
+
+In both styles, the link text is delimited by [square brackets].
+
+To create an inline link, use a set of regular parentheses immediately
+after the link text's closing square bracket. Inside the parentheses,
+put the URL where you want the link to point, along with an *optional*
+title for the link, surrounded in quotes. For example:
+
+    This is [an example](http://example.com/ "Title") inline link.
+
+    [This link](http://example.net/) has no title attribute.
+
+Will produce:
+
+    <p>This is <a href="http://example.com/" title="Title">
+    an example</a> inline link.</p>
+
+    <p><a href="http://example.net/">This link</a> has no
+    title attribute.</p>
+
+If you're referring to a local resource on the same server, you can
+use relative paths:
+
+    See my [About](/about/) page for details.   
+
+Reference-style links use a second set of square brackets, inside
+which you place a label of your choosing to identify the link:
+
+    This is [an example][id] reference-style link.
+
+You can optionally use a space to separate the sets of brackets:
+
+    This is [an example] [id] reference-style link.
+
+Then, anywhere in the document, you define your link label like this,
+on a line by itself:
+
+    [id]: http://example.com/  "Optional Title Here"
+
+That is:
+
+*   Square brackets containing the link identifier (optionally
+    indented from the left margin using up to three spaces);
+*   followed by a colon;
+*   followed by one or more spaces (or tabs);
+*   followed by the URL for the link;
+*   optionally followed by a title attribute for the link, enclosed
+    in double or single quotes, or enclosed in parentheses.
+
+The following three link definitions are equivalent:
+
+	[foo]: http://example.com/  "Optional Title Here"
+	[foo]: http://example.com/  'Optional Title Here'
+	[foo]: http://example.com/  (Optional Title Here)
+
+**Note:** There is a known bug in Markdown.pl 1.0.1 which prevents
+single quotes from being used to delimit link titles.
+
+The link URL may, optionally, be surrounded by angle brackets:
+
+    [id]: <http://example.com/>  "Optional Title Here"
+
+You can put the title attribute on the next line and use extra spaces
+or tabs for padding, which tends to look better with longer URLs:
+
+    [id]: http://example.com/longish/path/to/resource/here
+        "Optional Title Here"
+
+Link definitions are only used for creating links during Markdown
+processing, and are stripped from your document in the HTML output.
+
+Link definition names may consist of letters, numbers, spaces, and
+punctuation -- but they are *not* case sensitive. E.g. these two
+links:
+
+	[link text][a]
+	[link text][A]
+
+are equivalent.
+
+The *implicit link name* shortcut allows you to omit the name of the
+link, in which case the link text itself is used as the name.
+Just use an empty set of square brackets -- e.g., to link the word
+"Google" to the google.com web site, you could simply write:
+
+	[Google][]
+
+And then define the link:
+
+	[Google]: http://google.com/
+
+Because link names may contain spaces, this shortcut even works for
+multiple words in the link text:
+
+	Visit [Daring Fireball][] for more information.
+
+And then define the link:
+	
+	[Daring Fireball]: http://daringfireball.net/
+
+Link definitions can be placed anywhere in your Markdown document. I
+tend to put them immediately after each paragraph in which they're
+used, but if you want, you can put them all at the end of your
+document, sort of like footnotes.
+
+Here's an example of reference links in action:
+
+    I get 10 times more traffic from [Google] [1] than from
+    [Yahoo] [2] or [MSN] [3].
+
+      [1]: http://google.com/        "Google"
+      [2]: http://search.yahoo.com/  "Yahoo Search"
+      [3]: http://search.msn.com/    "MSN Search"
+
+Using the implicit link name shortcut, you could instead write:
+
+    I get 10 times more traffic from [Google][] than from
+    [Yahoo][] or [MSN][].
+
+      [google]: http://google.com/        "Google"
+      [yahoo]:  http://search.yahoo.com/  "Yahoo Search"
+      [msn]:    http://search.msn.com/    "MSN Search"
+
+Both of the above examples will produce the following HTML output:
+
+    <p>I get 10 times more traffic from <a href="http://google.com/"
+    title="Google">Google</a> than from
+    <a href="http://search.yahoo.com/" title="Yahoo Search">Yahoo</a>
+    or <a href="http://search.msn.com/" title="MSN Search">MSN</a>.</p>
+
+For comparison, here is the same paragraph written using
+Markdown's inline link style:
+
+    I get 10 times more traffic from [Google](http://google.com/ "Google")
+    than from [Yahoo](http://search.yahoo.com/ "Yahoo Search") or
+    [MSN](http://search.msn.com/ "MSN Search").
+
+The point of reference-style links is not that they're easier to
+write. The point is that with reference-style links, your document
+source is vastly more readable. Compare the above examples: using
+reference-style links, the paragraph itself is only 81 characters
+long; with inline-style links, it's 176 characters; and as raw HTML,
+it's 234 characters. In the raw HTML, there's more markup than there
+is text.
+
+With Markdown's reference-style links, a source document much more
+closely resembles the final output, as rendered in a browser. By
+allowing you to move the markup-related metadata out of the paragraph,
+you can add links without interrupting the narrative flow of your
+prose.
+
+
+<h3 id="em">Emphasis</h3>
+
+Markdown treats asterisks (`*`) and underscores (`_`) as indicators of
+emphasis. Text wrapped with one `*` or `_` will be wrapped with an
+HTML `<em>` tag; double `*`'s or `_`'s will be wrapped with an HTML
+`<strong>` tag. E.g., this input:
+
+    *single asterisks*
+
+    _single underscores_
+
+    **double asterisks**
+
+    __double underscores__
+
+will produce:
+
+    <em>single asterisks</em>
+
+    <em>single underscores</em>
+
+    <strong>double asterisks</strong>
+
+    <strong>double underscores</strong>
+
+You can use whichever style you prefer; the lone restriction is that
+the same character must be used to open and close an emphasis span.
+
+Emphasis can be used in the middle of a word:
+
+    un*frigging*believable
+
+But if you surround an `*` or `_` with spaces, it'll be treated as a
+literal asterisk or underscore.
+
+To produce a literal asterisk or underscore at a position where it
+would otherwise be used as an emphasis delimiter, you can backslash
+escape it:
+
+    \*this text is surrounded by literal asterisks\*
+
+
+
+<h3 id="code">Code</h3>
+
+To indicate a span of code, wrap it with backtick quotes (`` ` ``).
+Unlike a pre-formatted code block, a code span indicates code within a
+normal paragraph. For example:
+
+    Use the `printf()` function.
+
+will produce:
+
+    <p>Use the <code>printf()</code> function.</p>
+
+To include a literal backtick character within a code span, you can use
+multiple backticks as the opening and closing delimiters:
+
+    ``There is a literal backtick (`) here.``
+
+which will produce this:
+
+    <p><code>There is a literal backtick (`) here.</code></p>
+
+The backtick delimiters surrounding a code span may include spaces --
+one after the opening, one before the closing. This allows you to place
+literal backtick characters at the beginning or end of a code span:
+
+	A single backtick in a code span: `` ` ``
+	
+	A backtick-delimited string in a code span: `` `foo` ``
+
+will produce:
+
+	<p>A single backtick in a code span: <code>`</code></p>
+	
+	<p>A backtick-delimited string in a code span: <code>`foo`</code></p>
+
+With a code span, ampersands and angle brackets are encoded as HTML
+entities automatically, which makes it easy to include example HTML
+tags. Markdown will turn this:
+
+    Please don't use any `<blink>` tags.
+
+into:
+
+    <p>Please don't use any <code>&lt;blink&gt;</code> tags.</p>
+
+You can write this:
+
+    `&#8212;` is the decimal-encoded equivalent of `&mdash;`.
+
+to produce:
+
+    <p><code>&amp;#8212;</code> is the decimal-encoded
+    equivalent of <code>&amp;mdash;</code>.</p>
+
+
+
+<h3 id="img">Images</h3>
+
+Admittedly, it's fairly difficult to devise a "natural" syntax for
+placing images into a plain text document format.
+
+Markdown uses an image syntax that is intended to resemble the syntax
+for links, allowing for two styles: *inline* and *reference*.
+
+Inline image syntax looks like this:
+
+    ![Alt text](/path/to/img.jpg)
+
+    ![Alt text](/path/to/img.jpg "Optional title")
+
+That is:
+
+*   An exclamation mark: `!`;
+*   followed by a set of square brackets, containing the `alt`
+    attribute text for the image;
+*   followed by a set of parentheses, containing the URL or path to
+    the image, and an optional `title` attribute enclosed in double
+    or single quotes.
+
+Reference-style image syntax looks like this:
+
+    ![Alt text][id]
+
+Where "id" is the name of a defined image reference. Image references
+are defined using syntax identical to link references:
+
+    [id]: url/to/image  "Optional title attribute"
+
+As of this writing, Markdown has no syntax for specifying the
+dimensions of an image; if this is important to you, you can simply
+use regular HTML `<img>` tags.
+
+
+* * *
+
+
+<h2 id="misc">Miscellaneous</h2>
+
+<h3 id="autolink">Automatic Links</h3>
+
+Markdown supports a shortcut style for creating "automatic" links for URLs and email addresses: simply surround the URL or email address with angle brackets. What this means is that if you want to show the actual text of a URL or email address, and also have it be a clickable link, you can do this:
+
+    <http://example.com/>
+    
+Markdown will turn this into:
+
+    <a href="http://example.com/">http://example.com/</a>
+
+Automatic links for email addresses work similarly, except that
+Markdown will also perform a bit of randomized decimal and hex
+entity-encoding to help obscure your address from address-harvesting
+spambots. For example, Markdown will turn this:
+
+    <address@example.com>
+
+into something like this:
+
+    <a href="&#x6D;&#x61;i&#x6C;&#x74;&#x6F;:&#x61;&#x64;&#x64;&#x72;&#x65;
+    &#115;&#115;&#64;&#101;&#120;&#x61;&#109;&#x70;&#x6C;e&#x2E;&#99;&#111;
+    &#109;">&#x61;&#x64;&#x64;&#x72;&#x65;&#115;&#115;&#64;&#101;&#120;&#x61;
+    &#109;&#x70;&#x6C;e&#x2E;&#99;&#111;&#109;</a>
+
+which will render in a browser as a clickable link to "address@example.com".
+
+(This sort of entity-encoding trick will indeed fool many, if not
+most, address-harvesting bots, but it definitely won't fool all of
+them. It's better than nothing, but an address published in this way
+will probably eventually start receiving spam.)
+
+
+
+<h3 id="backslash">Backslash Escapes</h3>
+
+Markdown allows you to use backslash escapes to generate literal
+characters which would otherwise have special meaning in Markdown's
+formatting syntax. For example, if you wanted to surround a word
+with literal asterisks (instead of an HTML `<em>` tag), you can use
+backslashes before the asterisks, like this:
+
+    \*literal asterisks\*
+
+Markdown provides backslash escapes for the following characters:
+
+    \   backslash
+    `   backtick
+    *   asterisk
+    _   underscore
+    {}  curly braces
+    []  square brackets
+    ()  parentheses
+    #   hash mark
+	+	plus sign
+	-	minus sign (hyphen)
+    .   dot
+    !   exclamation mark
+
